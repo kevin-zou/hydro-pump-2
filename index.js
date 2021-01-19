@@ -2,7 +2,9 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
+
 const botCommands = require('./commands');
+const config = require('./config');
 
 Object.keys(botCommands).map(key => {
   bot.commands.set(botCommands[key].name, botCommands[key]);
@@ -16,10 +18,10 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
-  if (msg.content[0] === '!') { // TODO: change this to be a dynamic prefix
+  if (msg.content[0] === config.prefix) {
     const args = msg.content.split(/ +/);
-    const command = args.shift().toLowerCase().substring(1);
-  
+    const command = args.shift().substring(1);
+
     if (!bot.commands.has(command)) {
       msg.channel.send('This command does not exist!')
     } else {

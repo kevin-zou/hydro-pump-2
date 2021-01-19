@@ -1,8 +1,9 @@
+const config = require('../config');
+
 module.exports = {
   name: 'ping',
   description: 'Ping!',
   execute(msg, args) {
-    msg.reply('pong');
-    msg.channel.send('pong');
+    msg.channel.send('Pong!');
   },
 };
