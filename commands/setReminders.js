@@ -18,8 +18,24 @@ module.exports = {
 
     // Schedule reminders to the channel
     let notificationChannel = await msg.client.channels.fetch(config.notificationChannelId);
-    cron.schedule(config.cronSchedule, () => {
-      notificationChannel.send('Remember to stay hydrated!');
+    let task = cron.schedule(config.cronSchedule, () => {
+      notificationChannel.send(`Remember to stay hydrated! \nReact with 💧 in the next 5 minutes if you drank some water!`).then(msg => {
+        msg.react('💧');
+        const filter = reaction => reaction.emoji.name === '💧';
+        const collector = msg.createReactionCollector(filter, { time: 5 * 60 * 1000 });
+        collector.on('collect', reaction => console.log(`Collected ${reaction.emoji.name}`));
+        collector.on('end', collected => console.log(`Collected ${collected.size} items`));
+      });
     });
+
+    // Destroy any existing cron jobs
+    let existingTask = config.cronJobMap[msg.guild.id];
+    if (existingTask) {
+      existingTask.destroy();
+    }
+
+    // Start task, then save it to map
+    task.start();
+    config.cronJobMap[msg.guild.id] = task;
   },
 };
