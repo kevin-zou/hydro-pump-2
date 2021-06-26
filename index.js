@@ -48,8 +48,8 @@ client.once('ready', () => {
     });
     console.info('Guilds fetched from database and added to local config');
   }).catch((err) => {
-    console.err('Error fetching from database');
-    console.err(err);
+    console.error('Error fetching from database');
+    console.error(err);
   });
 });
 
