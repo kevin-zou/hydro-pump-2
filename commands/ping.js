@@ -5,5 +5,6 @@ module.exports = {
   description: 'Ping!',
   execute(msg, args) {
     msg.channel.send('Pong!');
+    console.log(config); // For debugging
   },
 };
